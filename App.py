@@ -22,7 +22,34 @@ def predictDigit(image):
 
 # Streamlit 
 st.set_page_config(page_title='Reconocimiento de Dígitos escritos a mano', layout='wide')
-st.title('Reconocimiento de Dígitos escritos a mano')
+# 🌈 Fondo de color y estilo general
+page_bg = """
+<style>
+[data-testid="stAppViewContainer"] {
+    background-color: #F0F8FF;
+}
+[data-testid="stSidebar"] {
+    background-color: #E3F2FD;
+}
+.block-container {
+    padding: 2rem 3rem;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    background-color: #FFFFFF;
+}
+</style>
+"""
+st.markdown(page_bg, unsafe_allow_html=True)
+# 🎨 Encabezado visual
+st.markdown("""
+    <h1 style='text-align: center; color: #4B9CD3;'>
+        ✨ Reconocimiento de Dígitos ✋
+    </h1>
+    <p style='text-align: center; color: #6C757D; font-size:18px;'>
+        Dibuja un número y deja que la red neuronal adivine qué escribiste.
+    </p>
+""", unsafe_allow_html=True)
+
 st.subheader("Dibuja el digito en el panel  y presiona  'Predecir'")
 
 # Add canvas component
@@ -44,7 +71,8 @@ canvas_result = st_canvas(
 )
 
 # Add "Predict Now" button
-if st.button('Predecir'):
+predict_button = st.button('🔮 ¡Predecir ahora!')
+if predict_button:
     if canvas_result.image_data is not None:
         input_numpy_array = np.array(canvas_result.image_data)
         input_image = Image.fromarray(input_numpy_array.astype('uint8'),'RGBA')
@@ -53,7 +81,7 @@ if st.button('Predecir'):
         res = predictDigit(img)
         st.header('El Digito es : ' + str(res))
     else:
-        st.header('Por favor dibuja en el canvas el digito.')
+        st.success(f"🎯 El dígito reconocido es: **{res}**")
 
 # Add sidebar
 st.sidebar.title("Acerca de:")
@@ -63,3 +91,4 @@ st.sidebar.text("digitos escritos a mano.")
 st.sidebar.text("Basado en desarrollo de Vinay Uniyal")
 #st.sidebar.text("GitHub Repository")
 #st.sidebar.write("[GitHub Repo Link](https://github.com/Vinay2022/Handwritten-Digit-Recognition)")
+
